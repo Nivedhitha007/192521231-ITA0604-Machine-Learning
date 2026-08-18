@@ -1,0 +1,37 @@
+import numpy as np
+import matplotlib.pyplot as plt
+from sklearn.linear_model import LinearRegression
+from sklearn.metrics import mean_absolute_error, r2_score
+
+np.random.seed(42)
+
+months = np.arange(1, 37).reshape(-1, 1)
+
+sales = (
+    10000
+    + months.flatten() * 500
+    + np.random.normal(0, 1000, len(months))
+)
+
+model = LinearRegression()
+model.fit(months, sales)
+
+predicted_sales = model.predict(months)
+
+print("Future Sales Prediction")
+print("MAE:", mean_absolute_error(sales, predicted_sales))
+print("R2 Score:", r2_score(sales, predicted_sales))
+
+future_months = np.arange(37, 43).reshape(-1, 1)
+future_sales = model.predict(future_months)
+
+for month, sale in zip(future_months.flatten(), future_sales):
+    print(f"Month {month}: Predicted Sales = {sale:.2f}")
+
+plt.scatter(months, sales, label="Actual Sales")
+plt.plot(months, predicted_sales, label="Prediction")
+plt.xlabel("Month")
+plt.ylabel("Sales")
+plt.title("Future Sales Prediction")
+plt.legend()
+plt.show()
